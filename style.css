@@ -1,0 +1,13 @@
+.cf-dontlike {
+    background: inherit;
+    border: 0;
+    color: #f96e6e;
+    font-weight: bold;
+    padding: 2px 8px;
+    text-decoration: none !important;
+}
+
+.cf-dontlike:hover {
+    background: #eee;
+    border-radius: 2px;
+}
