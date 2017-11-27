@@ -15,6 +15,7 @@ function log(message) {
 function sendData(payload) {
     let json_data = {
         client_id: client_id,
+        timestamp: Date.now(),
         payload: payload
     };
 

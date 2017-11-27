@@ -5,25 +5,33 @@ function onError(error) {
 };
 
 (function() {
-    //~ var comments = document.getElementsByClassName('comment timeline-comment');
-    //~ console.log(comments);
-
-    var text = $(".comment-body p")
-        //~ .css("border", "3px solid red")
-        .text();
-
     $(".comment.timeline-comment h3.timeline-comment-header-text")
         .append("<button class=\"cf-dontlike\">Dislike</button>");
 
-    console.log(text);
+    $(".cf-dontlike").click(function() {
+        let comment = $(this).parents(".comment");
+
+        // Get metadata
+        let author = $(this).parent().find(".author").text();
+        let timestamp = $(this).parent().find("relative-time").attr("datetime");
+        let timestamp_unix = Date.parse(timestamp);
+
+        // Get text contents
+        let paragraphs = $(comment).find("p");
+        let text = [];
+        $.each(paragraphs, function(idx, obj) {
+            text.push($(obj).text());
+        });
+
+        let payload = {
+            author: author,
+            timestamp: timestamp_unix,
+            text: text
+        };
+
+        browser.runtime.sendMessage(payload);
+    });
 
 
-    var payload = {
-        "timestamp": Date.now()
-    };
 
-    var msg = browser.runtime.sendMessage(payload);
-    //~ msg.then((response) => {
-      //~ console.log(response);
-    //~ });
 }());
