@@ -26,6 +26,10 @@ $(".cf-dontlike").click(function() {
     };
 
     browser.runtime.sendMessage(payload);
+
+    $(this).fadeOut(200, function() {
+      $(this).addClass("sent").text("Sent!").unbind();
+    }).fadeIn();
 });
 
 // Response that will be passed back by "executeScript"

@@ -7,6 +7,15 @@
     text-decoration: none !important;
 }
 
+.cf-dontlike.sent {
+    color: green;
+}
+
+.cf-dontlike.sent:hover {
+    background: inherit !important;
+    color: green;
+}
+
 .cf-dontlike:hover {
     background: #eee;
     border-radius: 2px;
