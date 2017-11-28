@@ -25,6 +25,7 @@
   },
 
   "permissions": [
+    "activeTab",
     "proxy",
     "storage",
     "tabs",
@@ -34,15 +35,17 @@
 
   "background": {
     "scripts": [
+      "ajax_detector.js",
       "background.js"
     ]
   },
 
   "content_scripts": [
     {
-      "matches": ["https://github.com/*/*/issues/*"],
-      "js": ["jquery-3.2.1.slim.min.js", "injector.js"],
-      "css": ["style.css"]
+      "matches": ["https://github.com/*/*"],
+      "js": ["jquery-3.2.1.slim.min.js"],
+      "css": ["style.css"],
+      "run_at": "document_idle"
     }
   ],
 
