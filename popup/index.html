@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script src="popup.js"></script>
+        <style type="text/css">
+            body {
+                font-size: 10pt;
+                margin: 0 14px;
+            }
+            div.table {
+                margin: 10px auto;
+                overflow: scroll;
+            }
+            #sentDataBuffer {
+                font-size: 8pt;
+                width: 90%;
+            }
+            #sentDataBuffer td {
+                padding: 8px 0 0;
+                white-space: nowrap;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <h2>CrowdFilter WebExtension</h2>
+            This is a project created at the TU Dresden, Faculty of Computer Science.<br>
+            Your client ID: <span id="client-id"></span><br>
+            In the following table you can see the most recent submissions you sent to our collector server.
+            Please note that the "text" attribute contains the text of your marked comment, but is removed from this overview.
+
+            <hr>
+
+            <div class="table">
+                <table id="sentDataBuffer"></table>
+            </div>
+        </div>
+    </body>
+</html>

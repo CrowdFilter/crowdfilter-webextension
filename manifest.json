@@ -8,14 +8,11 @@
     "48": "icons/logo.svg"
   },
 
-  "browser_action": {
+  "page_action": {
     "default_title": "CrowdFilter",
-    "browser_style": true,
-    "default_icon": {
-      "19": "icons/logo.svg",
-      "38": "icons/logo.svg",
-      "128": "icons/logo.svg"
-    }
+    "default_icon": "icons/logo.svg",
+    "default_popup": "popup/index.html",
+    "browser_style": true
   },
 
   "applications": {
@@ -25,9 +22,8 @@
   },
 
   "permissions": [
-    "activeTab",
-    "proxy",
     "storage",
+    "activeTab",
     "tabs",
     "webRequest",
     "https://github.com/*"
@@ -42,10 +38,12 @@
 
   "content_scripts": [
     {
-      "matches": ["https://github.com/*/*"],
+      "matches": [
+        "https://github.com/*/*"
+      ],
       "js": ["jquery-3.2.1.slim.min.js"],
       "css": ["style.css"],
-      "run_at": "document_idle"
+      "run_at": "document_end"
     }
   ],
 

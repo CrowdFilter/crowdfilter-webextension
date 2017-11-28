@@ -1,16 +1,5 @@
 'use strict';
 
-//~ var detector_port = browser.runtime.connect({ name: "injector" });
-//~ detector_port.postMessage({ msg: "Test message from CS" });
-//~ detector_port.onMessage.addListener(function (m) {
-    //~ console.log(m.msg);
-//~ });
-
-//~ function onError(error) {
-    //~ console.log(`Error: ${error}`);
-//~ };
-
-
 $(".comment.timeline-comment h3.timeline-comment-header-text")
     .append("<button class=\"cf-dontlike\">Dislike</button>");
 
@@ -38,3 +27,7 @@ $(".cf-dontlike").click(function() {
 
     browser.runtime.sendMessage(payload);
 });
+
+// Response that will be passed back by "executeScript"
+var result = "Injection complete!";
+result;
