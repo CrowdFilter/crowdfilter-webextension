@@ -1,0 +1,27 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12pt;
+    margin: 0 14px;
+}
+img.logo {
+    max-width: 40px;
+}
+div.table {
+    margin: 10px auto;
+}
+table {
+    border-collapse: collapse;
+}
+table, tr, td, th {
+    border: 1px solid grey;
+}
+td, th {
+    padding: 6px;
+}
+th {
+    background-color: #ddd;
+}
+td.monospace {
+    font-family: monospace;
+    font-size: 10pt;
+}

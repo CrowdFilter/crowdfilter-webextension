@@ -21,7 +21,7 @@ sendMessage("getSentDataBuffer", function(response) {
         }
 
         // Create a new row on top of the table
-        let row = table.insertRow(0);
+        let row = table.insertRow(1);
         let cell = row.insertCell();
 
         // Calculate time difference in minutes from the timestamp
@@ -38,6 +38,7 @@ sendMessage("getSentDataBuffer", function(response) {
         let data = response.msg[item];
         data.payload.text = [];
         cell.innerHTML = JSON.stringify(data);
+        cell.classList.add('monospace');
     }
 });
 

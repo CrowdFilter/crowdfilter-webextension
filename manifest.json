@@ -10,9 +10,7 @@
 
   "page_action": {
     "default_title": "CrowdFilter",
-    "default_icon": "icons/logo.svg",
-    "default_popup": "popup/index.html",
-    "browser_style": true
+    "default_icon": "icons/logo.svg"
   },
 
   "applications": {

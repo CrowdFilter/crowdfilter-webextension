@@ -71,6 +71,14 @@ function handleMessage(message, sender, respond) {
     }
 }
 
-browser.runtime.onMessage.addListener(handleMessage);
+function handleActionClick(tab) {
+    let new_tab = browser.tabs.create({
+        active: true,
+        index: tab.index + 1,
+        url: "/infopage/index.html"
+    });
+}
 
+browser.runtime.onMessage.addListener(handleMessage);
+browser.pageAction.onClicked.addListener(handleActionClick);
 

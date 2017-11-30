@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="infopage.js"></script>
+    </head>
+    <body>
+        <div>
+            <h1><img class="logo" src="logo.png"> CrowdFilter</h1>
+            <p>
+                This is a project created at the TU Dresden, Faculty of Computer Science.<br>
+                Your client ID: <span id="client-id"></span><br>
+            </p>
+            <p>In the following table you can see the most recent submissions you sent to our collector server. Please note that the "text" attribute contains the text of your marked comment, but is removed from this overview.</p>
+
+            <div class="table">
+                <table id="sentDataBuffer">
+                    <tr>
+                        <th>Time</th>
+                        <th>Sent data (JSON)</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
