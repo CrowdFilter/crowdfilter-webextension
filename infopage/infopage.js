@@ -12,13 +12,13 @@ sendMessage("getClientId", function(response) {
     document.querySelector("#client-id").innerHTML = response.msg;
 });
 
-// Fetch latest sent data
+// Fetch latest sent data and generate a table
 sendMessage("getSentDataBuffer", function(response) {
     let table = document.querySelector("#sentDataBuffer");
     for (let item in response.msg) {
-        if (item > 4) {
-            break;
-        }
+        //~ if (item > 4) {
+            //~ break;
+        //~ }
 
         // Create a new row on top of the table
         let row = table.insertRow(1);

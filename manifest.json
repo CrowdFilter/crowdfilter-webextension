@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "description": "__MSG_description__",
   "author": "Dominik Pataky",
+  "homepage_url": "https://bitkeks.eu/crowdfilter",
   "icons": {
     "48": "icons/logo.svg"
   },
@@ -21,7 +22,6 @@
 
   "permissions": [
     "storage",
-    "activeTab",
     "tabs",
     "webRequest",
     "https://github.com/*"
@@ -37,12 +37,16 @@
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*/*"
+        "https://github.com/*"
       ],
       "js": ["jquery-3.2.1.min.js"],
       "css": ["style.css"],
       "run_at": "document_end"
     }
+  ],
+
+  "web_accessible_resources": [
+      "icons/logo_16.png"
   ],
 
   "default_locale": "en"

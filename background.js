@@ -9,10 +9,13 @@ function onError(error) {
     console.log(`Error: ${error}`);
 }
 
-// Fetch client_id from storage, if exists. Else create a new ID and store it.
+/*
+ * Fetch client_id from storage, if exists. Else create a new ID and store it.
+ * Client ID is a 10-digit number between 1000000000 and 2**32.
+ */
 stGet().then((storage) => {
     if (storage.client_id == null) {
-        let id = Math.floor(Math.random() * 10**10);
+        let id = Math.floor(Math.random() * (2**32 - 10**9 + 1)) + 10**9;
         browser.storage.local.set({ client_id: id });
         client_id = id;
     } else {
@@ -66,11 +69,15 @@ function handleMessage(message, sender, respond) {
         if (message.msg == "getSentDataBuffer") {
             respond({ msg: sentDataBuffer });
         }
-    } else {
-        sendData(message);
+    } else if (message.src == "injector") {
+        // Injector content script send a payload to be saved in database
+        sendData(message.payload);
     }
 }
 
+/*
+ * Handle clicks on the address bar button.
+ */
 function handleActionClick(tab) {
     let new_tab = browser.tabs.create({
         active: true,
@@ -79,6 +86,9 @@ function handleActionClick(tab) {
     });
 }
 
+/*
+ * Add listeners for events.
+ */
 browser.runtime.onMessage.addListener(handleMessage);
 browser.pageAction.onClicked.addListener(handleActionClick);
 

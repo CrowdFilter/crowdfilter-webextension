@@ -1,9 +1,8 @@
 .cf-dontlike {
     background: inherit;
-    border: 0;
-    color: #f96e6e;
+    border: 1px solid #eee;
+    border-radius: 3px;
     font-weight: bold;
-    padding: 2px 8px;
     text-decoration: none !important;
 }
 
@@ -19,4 +18,33 @@
 .cf-dontlike:hover {
     background: #eee;
     border-radius: 2px;
+}
+
+.cf-dontlike > img {
+    vertical-align: sub;
+}
+
+.cf-classifier {
+    position: relative;
+    display: inline-block;
+}
+
+.cf-dropdown {
+    border: 2px solid #eee;
+    background-color: white;
+    display: none;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.cf-dropdown a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+}
+
+.cf-dropdown a:hover {
+    background-color: #eee;
+    text-decoration: none;
 }
