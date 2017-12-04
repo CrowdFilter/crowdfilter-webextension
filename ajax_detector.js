@@ -26,8 +26,12 @@ function url_catcher(details) {
     let url = details.url;
 
     if (url.includes("/issues/")) {
+        // Only catch pages which are an issue with comments
         show_page_action();
         inject("github");
+    } else if (url.includes("/News-Kommentare/")) {
+        show_page_action();
+        inject("heise");
     }
 }
 
@@ -36,7 +40,8 @@ browser.webRequest.onCompleted.addListener(
     url_catcher,
     {  // Filter
         urls: [
-            "https://github.com/*/*"
+            "https://github.com/*/*",
+            "https://www.heise.de/forum/heise-online/News-Kommentare/*"
         ]
     }
 );

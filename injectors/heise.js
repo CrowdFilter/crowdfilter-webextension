@@ -21,24 +21,16 @@ function handleClickClose(e) {
 
 function optionClicked(currentURL, comment, classification) {
     // Get metadata
-    let author = $(comment).children().find(".author").text();
-    let timestamp = $(comment).children().find("relative-time").attr("datetime");
+    let author = $(comment).find(".full_user_string").text();
+    let timestamp = $(comment).find(".posting_timestamp").data("mysql-beautify-date");
     let timestamp_unix = Date.parse(timestamp);
 
-    // Get text contents
-    let paragraphs = $(comment).find("p");
-    if (paragraphs.length < 1) {
-        // Handle email text input
-        paragraphs = $(comment).find(".email-fragment");
-    }
-
-    let text = [];
-    $.each(paragraphs, function(idx, obj) {
-        text.push($(obj).text());
-    });
+    // Get post content as HTML (for now, handling quotes can be done in backend)
+    let text = []
+    text.push($(comment).find(".post").html());
 
     let payload = {
-        source: "github",
+        source: "heise",
         author: author,
         original_url: currentURL,
         timestamp: timestamp_unix,
@@ -55,7 +47,7 @@ function optionClicked(currentURL, comment, classification) {
 // Build the button with dropdown
 
 var icon_url = browser.extension.getURL("icons/logo_16.png");
-var dropdown = $(".comment.timeline-comment h3.timeline-comment-header-text")
+var dropdown = $(".metabar")
     .append("<div class=\"cf-classifier\"></div>")
     .children(".cf-classifier")
     .append("<button class=\"cf-dontlike\"><img src=\""+icon_url+"\" /> CrowdFilter</button>")
@@ -64,7 +56,7 @@ var dropdown = $(".comment.timeline-comment h3.timeline-comment-header-text")
 
 for (let c in classifiers) {
     $(dropdown).append("<a class=\"cf-dropdown-option\" href=\"#\">" + classifiers[c] + "</a>");
-}
+};
 
 
 // Add onClick handler to the buttons
@@ -79,7 +71,7 @@ $(".cf-dropdown-option").click(function(e) {
     $(this).parents(".cf-dropdown").siblings("button").click(handleClickOpen);
 
     // Get comment object, text and URL and call handler
-    let comment = $(this).parents(".comment");
+    let comment = $(this).parents("div[id^='posting_']");
     let classification = $(this).text();
     let currentURL = location.href;
     optionClicked(currentURL, comment, classification);

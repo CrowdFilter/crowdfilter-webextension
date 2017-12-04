@@ -24,7 +24,8 @@
     "storage",
     "tabs",
     "webRequest",
-    "https://github.com/*"
+    "https://github.com/*",
+    "https://www.heise.de/forum/heise-online/News-Kommentare/*"
   ],
 
   "background": {
@@ -37,10 +38,11 @@
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*"
+        "https://github.com/*",
+        "https://www.heise.de/forum/heise-online/News-Kommentare/*"
       ],
       "js": ["jquery-3.2.1.min.js"],
-      "css": ["style.css"],
+      "css": ["cf-style.css"],
       "run_at": "document_end"
     }
   ],
