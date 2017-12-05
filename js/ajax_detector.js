@@ -16,23 +16,26 @@ function show_page_action() {
  */
 function inject(injector) {
     browser.tabs.executeScript({
-        file: "/injectors/" + injector + ".js"
+        file: "/js/injectors/" + injector + ".js"
     }).then(function(result) {
     }, onError);
 }
 
 
 function url_catcher(details) {
+    fetchConfigFilters();
+    // Check each filter
     let url = details.url;
-
-    if (url.includes("/issues/")) {
-        // Only catch pages which are an issue with comments
-        show_page_action();
-        inject("github");
-    } else if (url.includes("/News-Kommentare/")) {
-        show_page_action();
-        inject("heise");
-    }
+    let regexp;
+    for (const key of Object.keys(filters)) {
+        regexp = new RegExp(filters[key], "i");
+        console.log(url, regexp, url.match(regexp));
+        if (url.match(regexp) != null) {
+            show_page_action();
+            inject(key);
+            break;
+        }
+    };
 }
 
 // only in background scripts!

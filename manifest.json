@@ -24,24 +24,25 @@
     "storage",
     "tabs",
     "webRequest",
+    "http://localhost/*",
     "https://github.com/*",
     "https://www.heise.de/forum/heise-online/News-Kommentare/*"
   ],
 
   "background": {
     "scripts": [
-      "ajax_detector.js",
-      "background.js"
+      "js/ajax_detector.js",
+      "js/background.js"
     ]
   },
 
   "content_scripts": [
     {
       "matches": [
-        "https://github.com/*",
+        "https://github.com/*/*",
         "https://www.heise.de/forum/heise-online/News-Kommentare/*"
       ],
-      "js": ["jquery-3.2.1.min.js"],
+      "js": ["js/jquery-3.2.1.min.js", "js/cf-injection.js"],
       "css": ["cf-style.css"],
       "run_at": "document_end"
     }

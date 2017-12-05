@@ -16,10 +16,6 @@ sendMessage("getClientId", function(response) {
 sendMessage("getSentDataBuffer", function(response) {
     let table = document.querySelector("#sentDataBuffer");
     for (let item in response.msg) {
-        //~ if (item > 4) {
-            //~ break;
-        //~ }
-
         // Create a new row on top of the table
         let row = table.insertRow(1);
         let cell = row.insertCell();
@@ -36,7 +32,7 @@ sendMessage("getSentDataBuffer", function(response) {
         // Insert second cell with raw data that was sent to remote server
         cell = row.insertCell();
         let data = response.msg[item];
-        data.payload.text = [];
+        data.payload.html = [];
         cell.innerHTML = JSON.stringify(data);
         cell.classList.add('monospace');
     }

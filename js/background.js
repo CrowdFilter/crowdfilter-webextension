@@ -5,6 +5,9 @@ const stSet = browser.storage.local.set;
 var client_id;
 var sentDataBuffer = [];
 
+// Filters are key-value regexp used in the injector
+var filters;
+
 function onError(error) {
     console.log(`Error: ${error}`);
 }
@@ -22,6 +25,8 @@ stGet().then((storage) => {
         client_id = storage.client_id;
     }
 }, onError);
+
+fetchConfigFilters();
 
 /*
  * Send JSON to collector endpoint
@@ -49,9 +54,27 @@ function sendData(payload) {
       return response.text();
     }).then((text) => {
       sentDataBuffer.push(json_data);
-    }).catch((error) => {
-      console.error(error)
+    }).catch(onError);
+}
+
+function fetchConfigFilters() {
+    let req = new Request("http://localhost:5000/config/filters", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        },
+        mode: 'no-cors',
+        redirect: 'follow',
+        referrer: 'client'
     });
+
+    fetch(req).then(function(response) {
+        console.log(response);
+        return response.json();
+    }).then(function(res) {
+        console.log(res);
+        filters = res;
+    }).catch(onError);
 }
 
 /*
