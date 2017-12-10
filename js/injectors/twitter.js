@@ -1,9 +1,9 @@
 'use strict';
 
 var comment_element_id_prefix = null;
-var comment_element_classes = ["comment"];
-var injection_element_identifier = ".comment.timeline-comment h3.timeline-comment-header-text";
-var clicked_source = "github";
+var comment_element_classes = ["permalink-tweet", "tweet"];
+var injection_element_identifier = ".tweet-details-fixer";
+var clicked_source = "twitter";
 
 injectButton(injection_element_identifier);
 

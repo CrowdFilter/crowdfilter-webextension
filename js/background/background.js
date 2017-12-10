@@ -4,9 +4,11 @@ const stSet = browser.storage.local.set;
 
 var client_id;
 var sentDataBuffer = [];
+var lang = browser.i18n.getUILanguage();
 
 // Filters are key-value regexp used in the injector
 var filters;
+var classifiers;
 
 function onError(error) {
     console.log(`Error: ${error}`);
@@ -26,7 +28,13 @@ stGet().then((storage) => {
     }
 }, onError);
 
-fetchConfigFilters();
+fetchConfig("filters", function(res) {
+    filters = res;
+});
+
+fetchConfig("classifiers/"+lang, function(res) {
+    classifiers = res;
+});
 
 /*
  * Send JSON to collector endpoint
@@ -57,8 +65,11 @@ function sendData(payload) {
     }).catch(onError);
 }
 
-function fetchConfigFilters() {
-    let req = new Request("http://localhost:5000/config/filters", {
+/*
+ * Get config for $endpoint and call $callback with the received JSON
+ */
+function fetchConfig(endpoint, callback) {
+    let req = new Request("http://localhost:5000/config/"+endpoint, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -69,11 +80,9 @@ function fetchConfigFilters() {
     });
 
     fetch(req).then(function(response) {
-        console.log(response);
         return response.json();
     }).then(function(res) {
-        console.log(res);
-        filters = res;
+        callback(res);
     }).catch(onError);
 }
 
@@ -92,9 +101,21 @@ function handleMessage(message, sender, respond) {
         if (message.msg == "getSentDataBuffer") {
             respond({ msg: sentDataBuffer });
         }
-    } else if (message.src == "injector") {
-        // Injector content script send a payload to be saved in database
-        sendData(message.payload);
+    }
+
+    if (message.src == "injector") {
+        if (message.cmd != null) {
+            switch (message.cmd) {
+                case "getClassifiers":
+                    respond({ type: "getClassifiers", response: classifiers });
+                    break;
+            }
+        }
+
+        if (message.payload != null) {
+            // Injector content script send a payload to be saved in database
+            sendData(message.payload);
+        }
     }
 }
 
@@ -102,10 +123,11 @@ function handleMessage(message, sender, respond) {
  * Handle clicks on the address bar button.
  */
 function handleActionClick(tab) {
+    let url = browser.i18n.getUILanguage() == "de"? "/infopage/index-de.html":"/infopage/index.html";
     let new_tab = browser.tabs.create({
         active: true,
         index: tab.index + 1,
-        url: "/infopage/index.html"
+        url: url
     });
 }
 
@@ -114,4 +136,3 @@ function handleActionClick(tab) {
  */
 browser.runtime.onMessage.addListener(handleMessage);
 browser.pageAction.onClicked.addListener(handleActionClick);
-

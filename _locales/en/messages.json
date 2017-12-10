@@ -1,5 +1,6 @@
 {
-  "description": {
-    "message": "CrowdFilter Test Addon EN"
+  "extensionDescription": {
+    "message": "CrowdFilter Test Addon EN",
+    "description": "Description of the extension"
   }
 }

@@ -16,20 +16,25 @@ function show_page_action() {
  */
 function inject(injector) {
     browser.tabs.executeScript({
-        file: "/js/injectors/" + injector + ".js"
+        file: "/js/injectors/" + injector + ".js",
+        allFrames: true,
+        runAt: "document_idle"
     }).then(function(result) {
-    }, onError);
+    }, function(error) {
+        console.log(error);
+        console.log(context);
+    });
 }
 
 
 function url_catcher(details) {
-    fetchConfigFilters();
     // Check each filter
     let url = details.url;
     let regexp;
     for (const key of Object.keys(filters)) {
         regexp = new RegExp(filters[key], "i");
         console.log(url, regexp, url.match(regexp));
+        console.log(url.match(regexp) != null);
         if (url.match(regexp) != null) {
             show_page_action();
             inject(key);
@@ -44,7 +49,8 @@ browser.webRequest.onCompleted.addListener(
     {  // Filter
         urls: [
             "https://github.com/*/*",
-            "https://www.heise.de/forum/heise-online/News-Kommentare/*"
+            "https://www.heise.de/forum/*/News-Kommentare/*",
+            "https://twitter.com/*/status/*"
         ]
     }
 );

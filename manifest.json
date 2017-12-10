@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "CrowdFilter",
   "version": "0.1.0",
-  "description": "__MSG_description__",
+  "description": "__MSG_extensiondescription__",
   "author": "Dominik Pataky",
   "homepage_url": "https://bitkeks.eu/crowdfilter",
   "icons": {
@@ -24,15 +24,17 @@
     "storage",
     "tabs",
     "webRequest",
+    "activeTab",
     "http://localhost/*",
     "https://github.com/*",
-    "https://www.heise.de/forum/heise-online/News-Kommentare/*"
+    "https://www.heise.de/forum/*",
+    "https://twitter.com/*"
   ],
 
   "background": {
     "scripts": [
-      "js/ajax_detector.js",
-      "js/background.js"
+      "js/background/ajax_detector.js",
+      "js/background/background.js"
     ]
   },
 
@@ -40,9 +42,10 @@
     {
       "matches": [
         "https://github.com/*/*",
-        "https://www.heise.de/forum/heise-online/News-Kommentare/*"
+        "https://www.heise.de/forum/*/News-Kommentare/*",
+        "https://twitter.com/*"
       ],
-      "js": ["js/jquery-3.2.1.min.js", "js/cf-injection.js"],
+      "js": ["js/cf-injection.js"],
       "css": ["cf-style.css"],
       "run_at": "document_end"
     }

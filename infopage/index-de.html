@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="infopage.js"></script>
+    </head>
+    <body>
+        <div>
+            <h1><img class="logo" src="logo.png"> CrowdFilter</h1>
+            <p>
+                Dies ist ein Projekt der TU Dresden, Fakultät Informatik, Lehrstuhl für Datenschutz und Datensicherheit.<br>
+                Mehr Informationen auf <a href="https://bitkeks.eu/crowdfilter">der Projektseite</a>.<br>
+                Lokale Client-ID: <span id="client-id"></span><br>
+            </p>
+            <p>In der folgenden Tabelle werden die Daten dargestellt, die die Extension in dieser Sitzung an unseren Server gesendet hat. Zur besseren Übersichtlichkeit ist der Inhalt von "html" entfernt, es handelt sich hierbei um den HTML-Quellcode des entsprechend markierten Kommentars.</p>
+
+            <div class="table">
+                <table id="sentDataBuffer">
+                    <tr>
+                        <th>Zeit</th>
+                        <th>Gesendete Daten</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
