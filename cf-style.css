@@ -1,8 +1,11 @@
 .cf-dontlike {
-    background: inherit;
-    border: 1px solid #eee;
+    background-color: #ffbebe;
+    border: 1px solid red;
     border-radius: 3px;
     font-weight: bold;
+    padding: 3px 8px;
+    margin-left: 5px;
+    margin-right: 5px;
     text-decoration: none !important;
 }
 
@@ -32,6 +35,7 @@
 .cf-dropdown {
     border: 2px solid #eee;
     background-color: white;
+    color: black;
     display: none;
     padding: 0;
     position: absolute;
@@ -39,12 +43,18 @@
 }
 
 .cf-dropdown a {
+    color: black !important;
     display: block;
     padding: 8px;
     text-decoration: none;
 }
 
+.cf-option-used {
+    background-color: #b7ffb7;
+}
+
 .cf-dropdown a:hover {
-    background-color: #eee;
+    background-color: #efefef;
+    color: black !important;
     text-decoration: none;
 }

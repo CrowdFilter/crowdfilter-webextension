@@ -62,7 +62,6 @@ function handleStorageChange(changes, areaName) {
  * on the addon option page.
  */
 function toggleTor(useTor) {
-    console.log("Setting hostname to TOR: ", useTor);
     if (useTor) {
         collectorHostname = "http://5yxnb2zpucxtxbls.onion/collector";
         return;

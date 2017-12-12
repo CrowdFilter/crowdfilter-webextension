@@ -45,6 +45,15 @@ function sendOptionData(currentURL, comment, classification, source) {
  */
 function optionClicked(e) {
     e.preventDefault();
+    e.stopPropagation();
+
+    if (this.classList.contains("cf-option-used")) {
+        // Don't allow multiple uses of the same classification
+        return;
+    }
+
+    // Mark option as clicked
+    this.classList.add("cf-option-used");
 
     // Hide the popup when option is clicked
     this.parentElement.style.display = "none";
@@ -71,8 +80,6 @@ function optionClicked(e) {
     let classification = this.innerText;
     let currentURL = location.href;
     sendOptionData(currentURL, comment, classification, clicked_source);
-
-    e.stopPropagation();
 }
 
 
@@ -81,8 +88,6 @@ function optionClicked(e) {
  */
 function injectButton(injection_element_identifier) {
     var els = d.querySelectorAll(injection_element_identifier);
-
-    console.log(els);
 
     els.forEach(function(val, idx, obj) {
         let di = d.createElement("div");
@@ -102,7 +107,7 @@ function injectButton(injection_element_identifier) {
 
         let dd = d.createElement("div");
         dd.classList.add("cf-dropdown");
-        for (let c in classifiers) {
+        for (let c in classifiers.sort()) {
             let option = d.createElement("a");
             option.classList.add("cf-dropdown-option");
             option.setAttribute("href", "#");
