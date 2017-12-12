@@ -6,17 +6,28 @@
     <style type="text/css">
       .pos { color:green; }
       .neg { color:darkred; }
-      button { margin: 13px; }
+      form > * { margin: 6px; }
+      h2 { margin-top: 2em; }
+      .thanks { color: green; display: none; }
     </style>
   </head>
 
 <body>
+  <h2>Settings</h2>
   <p><b id="use-tor">no value found</b></p>
-  <form>
-      <input type="checkbox" id="useTor">
-      <label id="useTor"></label><br>
-      <button type="submit">Save</button>
+  <form id="settings">
+      <input type="checkbox" id="useTor" name="useTor">
+      <label id="useTor-label" for="useTor"></label><br>
+      <button class="browser-style" type="submit">Save settings</button>
   </form>
+
+  <h2>Feedback</h2>
+  <p>You can leave us feedback here, it will be sent to us!</p>
+  <form class="browser-style" id="feedback">
+      <textarea id="comment" name="comment" rows="6" cols="80" placeholder="Input your comment.."></textarea><br>
+      <button class="browser-style" type="submit">Submit</button><span class="thanks">Feedback sent, thanks!</span>
+  </form>
+
   <script src="options.js"></script>
 </body>
 

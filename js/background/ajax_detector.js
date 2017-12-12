@@ -32,8 +32,6 @@ function url_catcher(details) {
     let regexp;
     for (const key of Object.keys(filters)) {
         regexp = new RegExp(filters[key], "i");
-        console.log(url, regexp, url.match(regexp));
-        console.log(url.match(regexp) != null);
         if (url.match(regexp) != null) {
             show_page_action();
             inject(key);

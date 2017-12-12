@@ -30,14 +30,30 @@ stGet().then((storage) => {
 
 /*
  * Listen for changes in the local storage and handle some option changes
+ * as well as handling of comments sent as feedback. Needed, because the async
+ * sendMessage broke in options page.
  */
 function handleStorageChange(changes, areaName) {
+    // Handle TOR checkbox
     if (changes["useTor"] != undefined) {
-        if (changes["useTor"].newValue) {
+        if (changes["useTor"].newValue == true) {
             toggleTor(true);
             return;
         }
         toggleTor(false);
+    }
+
+    // Hack to buffer feedback comments.
+    // Does not work with sendMessage in options page, so options page sets
+    // a new value for the "setting", which triggers this function.
+    // Second condition: handle ONLY new feedbacks, not removal.
+    // storage.remove produces an object with no newValue.
+    if (changes.feedback != null && changes.feedback.newValue != null) {
+        let comment = changes.feedback.newValue;
+        if (comment == "") return;
+        sendFeedback(comment);
+        browser.storage.local.remove("feedback")
+            .then(null, error => { console.error(error); });
     }
 }
 
@@ -109,6 +125,34 @@ function fetchConfig() {
 }
 
 /*
+ *
+ */
+function sendFeedback(comment) {
+    let json_data = {
+        client_id: client_id,
+        timestamp: Date.now(),
+        comment: comment
+    };
+
+    var req = new Request(collectorHostname + "/collect/feedback", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json_data),
+        redirect: 'follow',
+        referrer: 'client'
+    });
+
+    fetch(req).then(function(response) {
+      // .text returns another promise
+      return response.json();
+    }).then((json) => {
+      sentDataBuffer.push(json_data);
+    }).catch(error => { console.log(error); });
+}
+
+/*
  * Handle messages from content scripts (injectors)
  */
 function handleMessage(message, sender, respond) {
@@ -164,4 +208,4 @@ browser.runtime.onStartup.addListener(fetchConfig);
 browser.runtime.onInstalled.addListener(fetchConfig);
 
 // Init timer to regularly fetch the config
-window.setInterval(fetchConfig, 60000);
+window.setInterval(fetchConfig, 10*60*1000);

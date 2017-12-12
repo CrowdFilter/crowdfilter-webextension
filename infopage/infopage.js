@@ -32,9 +32,12 @@ sendMessage("getSentDataBuffer", function(response) {
         // Insert second cell with raw data that was sent to remote server
         cell = row.insertCell();
         let data = response.msg[item];
-        data.payload.html = [];
-        cell.innerHTML = JSON.stringify(data);
-        cell.classList.add('monospace');
+        if (data.comment != null) {
+            cell.innerHTML = "Feedback: " + data.comment;
+        } else {
+            data.payload.html = [];
+            cell.innerHTML = JSON.stringify(data);
+            cell.classList.add('monospace');
+        }
     }
 });
-
