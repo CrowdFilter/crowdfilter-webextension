@@ -1,6 +1,19 @@
 {
   "extensionDescription": {
-    "message": "CrowdFilter Test Addon EN",
+    "message": "CrowdFilter addon",
     "description": "Description of the extension"
+  },
+
+  "useTorNeg": {
+    "message": "Data will NOT be sent to the TOR hidden service",
+    "description": ""
+  },
+  "useTorPos": {
+    "message": "Data will be sent to the TOR hidden service",
+    "description": ""
+  },
+  "useTorLabel": {
+    "message": "Use TOR hidden service",
+    "description": ""
   }
 }

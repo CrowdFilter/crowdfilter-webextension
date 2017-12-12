@@ -10,9 +10,8 @@ var lang = browser.i18n.getUILanguage();
 var filters;
 var classifiers;
 
-function onError(error) {
-    console.log(`Error: ${error}`);
-}
+// Set default HTTPS endpoint
+var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
 
 /*
  * Fetch client_id from storage, if exists. Else create a new ID and store it.
@@ -26,15 +25,44 @@ stGet().then((storage) => {
     } else {
         client_id = storage.client_id;
     }
-}, onError);
+}, error => { console.error(error) });
 
 fetchConfig("filters", function(res) {
     filters = res;
 });
 
-fetchConfig("classifiers/"+lang, function(res) {
+fetchConfig("classifiers/" + lang, function(res) {
     classifiers = res;
 });
+
+
+
+/*
+ * Listen for changes in the local storage and handle some option changes
+ */
+function handleStorageChange(changes, areaName) {
+    console.log(changes);
+    if (changes["useTor"] != undefined) {
+        if (changes["useTor"].newValue) {
+            toggleTor(true);
+            return;
+        }
+        toggleTor(false);
+    }
+}
+
+/*
+ * Toggle the collector hostname, triggered by a change of options
+ * on the addon option page.
+ */
+function toggleTor(useTor) {
+    console.log("Setting hostname to TOR: ", useTor);
+    if (useTor) {
+        collectorHostname = "http://5yxnb2zpucxtxbls.onion/collector";
+        return;
+    }
+    collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
+}
 
 /*
  * Send JSON to collector endpoint
@@ -46,35 +74,33 @@ function sendData(payload) {
         payload: payload
     };
 
-    var req = new Request("http://localhost:5000/collect/sendto", {
+    var req = new Request(collectorHostname + "/collect/sendto", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(json_data),
-        mode: 'no-cors',
         redirect: 'follow',
         referrer: 'client'
     });
 
     fetch(req).then(function(response) {
       // .text returns another promise
-      return response.text();
-    }).then((text) => {
+      return response.json();
+    }).then((json) => {
       sentDataBuffer.push(json_data);
-    }).catch(onError);
+    }).catch(error => { console.log(error); });
 }
 
 /*
  * Get config for $endpoint and call $callback with the received JSON
  */
 function fetchConfig(endpoint, callback) {
-    let req = new Request("http://localhost:5000/config/"+endpoint, {
+    let req = new Request(collectorHostname + "/config/" + endpoint, {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
         },
-        mode: 'no-cors',
         redirect: 'follow',
         referrer: 'client'
     });
@@ -83,7 +109,7 @@ function fetchConfig(endpoint, callback) {
         return response.json();
     }).then(function(res) {
         callback(res);
-    }).catch(onError);
+    }).catch(error => { console.log(error); });
 }
 
 /*
@@ -136,3 +162,4 @@ function handleActionClick(tab) {
  */
 browser.runtime.onMessage.addListener(handleMessage);
 browser.pageAction.onClicked.addListener(handleActionClick);
+browser.storage.onChanged.addListener(handleStorageChange);

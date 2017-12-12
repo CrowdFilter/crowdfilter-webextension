@@ -8,7 +8,7 @@ function show_page_action() {
         .then(function(tabs) {
             browser.pageAction.show(tabs[0].id);
         })
-        .catch(onError);
+        .catch(error => { console.error(error) });
 }
 
 /*
@@ -21,8 +21,7 @@ function inject(injector) {
         runAt: "document_idle"
     }).then(function(result) {
     }, function(error) {
-        console.log(error);
-        console.log(context);
+        console.error(error);
     });
 }
 

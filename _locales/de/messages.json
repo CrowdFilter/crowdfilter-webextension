@@ -1,6 +1,19 @@
 {
   "extensionDescription": {
-    "message": "CrowdFilter Test Addon DE",
+    "message": "CrowdFilter Addon",
     "description": "Details zur Extension"
+  },
+
+  "useTorNeg": {
+    "message": "Gesammelte Daten werden normal über HTTPS übermittelt",
+    "description": ""
+  },
+  "useTorPos": {
+    "message": "Gesammelte Daten werden an den TOR Hidden Service übermittelt",
+    "description": ""
+  },
+  "useTorLabel": {
+    "message": "TOR Hidden Service verwenden",
+    "description": ""
   }
 }

@@ -1,17 +1,18 @@
 {
   "manifest_version": 2,
   "name": "CrowdFilter",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "__MSG_extensiondescription__",
-  "author": "Dominik Pataky",
-  "homepage_url": "https://bitkeks.eu/crowdfilter",
+  "author": "@bitkeks",
+  "homepage_url": "https://crowdfilter.bitkeks.eu",
   "icons": {
     "48": "icons/logo.svg"
   },
 
   "page_action": {
     "default_title": "CrowdFilter",
-    "default_icon": "icons/logo.svg"
+    "default_icon": "icons/logo.svg",
+    "browser_style": true
   },
 
   "applications": {
@@ -22,10 +23,10 @@
 
   "permissions": [
     "storage",
-    "tabs",
     "webRequest",
     "activeTab",
-    "http://localhost/*",
+    "https://crowdfilter.bitkeks.eu/*",
+    "http://5yxnb2zpucxtxbls.onion/*",
     "https://github.com/*",
     "https://www.heise.de/forum/*",
     "https://twitter.com/*"
@@ -50,6 +51,11 @@
       "run_at": "document_end"
     }
   ],
+
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
 
   "web_accessible_resources": [
       "icons/logo_16.png"

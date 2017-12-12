@@ -1,7 +1,3 @@
-function onError(error) {
-    console.log(error);
-}
-
 /*
  * Handler for click event on cf-dontlike button
  */
@@ -142,7 +138,7 @@ function sendCommandToBackground(cmd) {
     browser.runtime.sendMessage({
         src: "injector",
         cmd: cmd
-    }).then(handleResponse, onError);
+    }).then(handleResponse, error => { console.error(error); });
 }
 
 function handleResponse(message) {
