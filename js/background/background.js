@@ -27,21 +27,11 @@ stGet().then((storage) => {
     }
 }, error => { console.error(error) });
 
-fetchConfig("filters", function(res) {
-    filters = res;
-});
-
-fetchConfig("classifiers/" + lang, function(res) {
-    classifiers = res;
-});
-
-
 
 /*
  * Listen for changes in the local storage and handle some option changes
  */
 function handleStorageChange(changes, areaName) {
-    console.log(changes);
     if (changes["useTor"] != undefined) {
         if (changes["useTor"].newValue) {
             toggleTor(true);
@@ -95,8 +85,8 @@ function sendData(payload) {
 /*
  * Get config for $endpoint and call $callback with the received JSON
  */
-function fetchConfig(endpoint, callback) {
-    let req = new Request(collectorHostname + "/config/" + endpoint, {
+function fetchConfig() {
+    let req = new Request(collectorHostname + "/config", {
         method: 'GET',
         headers: {
             'Accept': 'application/json'
@@ -107,8 +97,14 @@ function fetchConfig(endpoint, callback) {
 
     fetch(req).then(function(response) {
         return response.json();
-    }).then(function(res) {
-        callback(res);
+    }).then(function(config) {
+        stSet({config: config});
+        filters = config.filters;
+        if (lang == "de") {
+            classifiers = config.classifiers.de;
+        } else {
+            classifiers = config.classifiers.en;
+        }
     }).catch(error => { console.log(error); });
 }
 
@@ -163,3 +159,9 @@ function handleActionClick(tab) {
 browser.runtime.onMessage.addListener(handleMessage);
 browser.pageAction.onClicked.addListener(handleActionClick);
 browser.storage.onChanged.addListener(handleStorageChange);
+
+browser.runtime.onStartup.addListener(fetchConfig);
+browser.runtime.onInstalled.addListener(fetchConfig);
+
+// Init timer to regularly fetch the config
+window.setInterval(fetchConfig, 60000);
