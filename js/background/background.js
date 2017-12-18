@@ -40,7 +40,7 @@ const config = {
                 "de": "Rassismus"
             },
             "description": {
-                "en": "Bad content that aims at the race, origin or ethnic of the poster",
+                "en": "Bad content that aims at race, origin or ethnic of the poster",
                 "de": "Beiträge, die sich vorrangig gegen Rasse, Herkunft oder Ethnie richten"
             },
             "positive": false
@@ -122,6 +122,8 @@ stGet().then((storage) => {
     } else {
         sentData = storage.sentData;
     }
+
+    stSet({ classifiers: config.classifiers });
 }, error => { console.error(error) });
 
 /*
