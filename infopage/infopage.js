@@ -1,10 +1,13 @@
-function sendMessage(message, callback) {
-    let chan = browser.runtime.sendMessage({
-        src: "popup",
-        msg: message
-    });
-
-    chan.then(callback);
+async function sendMessage(message, callback) {
+    try {
+        let response = await browser.runtime.sendMessage({
+            src: "popup",
+            msg: message
+        });
+        callback(response);
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 // Automatically retrieve client ID to display in popup
@@ -13,7 +16,7 @@ sendMessage("getClientId", function(response) {
 });
 
 // Fetch latest sent data and generate a table
-sendMessage("getSentDataBuffer", function(response) {
+sendMessage("getSentData", async function(response) {
     let table = document.querySelector("#sentDataBuffer");
     for (let item in response.msg) {
         // Create a new row on top of the table
@@ -34,7 +37,7 @@ sendMessage("getSentDataBuffer", function(response) {
         let data = response.msg[item];
         if (data.comment != null) {
             cell.innerText = "Feedback: " + data.comment;
-        } else {
+        } else if (data.payload != null) {
             data.payload.html = [];
             cell.innerText = JSON.stringify(data);
             cell.classList.add('monospace');

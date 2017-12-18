@@ -1,3 +1,7 @@
+const icon_url = browser.extension.getURL("icons/logo_16.png");
+const d = document;
+const lang = browser.i18n.getUILanguage().startsWith("de") ? "de" : "en";
+
 /*
  * Handler for click event on cf-dontlike button
  */
@@ -86,8 +90,18 @@ function optionClicked(e) {
 /*
  *
  */
-function injectButton(injection_element_identifier) {
+async function injectButton(injection_element_identifier) {
+    let classifiers = await sendCommandToBackground("getClassifiers");
     var els = d.querySelectorAll(injection_element_identifier);
+
+    let sort_func = function(a, b) {
+        if (a.keyword[lang] < b.keyword[lang]) {
+            return -1;
+        } else if (a.keyword[lang] > b.keyword[lang]) {
+            return 1;
+        }
+        return 0;
+    };
 
     els.forEach(function(val, idx, obj) {
         let di = d.createElement("div");
@@ -107,13 +121,15 @@ function injectButton(injection_element_identifier) {
 
         let dd = d.createElement("div");
         dd.classList.add("cf-dropdown");
-        for (let c in classifiers.sort()) {
+        for (const c in classifiers.sort(sort_func)) {
+            let cl = classifiers[c];
+
             let option = d.createElement("a");
             option.classList.add("cf-dropdown-option");
             option.setAttribute("href", "#");
             option.addEventListener("click", optionClicked);
 
-            let text = d.createTextNode(classifiers[c]);
+            let text = d.createTextNode(cl.keyword[lang]);
             option.appendChild(text);
 
             dd.appendChild(option);
@@ -121,12 +137,6 @@ function injectButton(injection_element_identifier) {
         di.appendChild(dd);
     });
 }
-
-var classifiers;
-var icon_url = browser.extension.getURL("icons/logo_16.png");
-var d = document;
-
-sendCommandToBackground("getClassifiers");
 
 /*
  * Sending the payload object to the background script,
@@ -139,18 +149,19 @@ function sendPayloadToBackground(payload) {
     });
 }
 
-function sendCommandToBackground(cmd) {
-    browser.runtime.sendMessage({
-        src: "injector",
-        cmd: cmd
-    }).then(handleResponse, error => { console.error(error); });
-}
+async function sendCommandToBackground(cmd) {
+    try {
+        let message = await browser.runtime.sendMessage({
+            src: "injector",
+            cmd: cmd
+        });
 
-function handleResponse(message) {
-    switch (message.type) {
-        case "getClassifiers":
-            classifiers = message.response;
-            break;
+        switch (message.type) {
+            case "getClassifiers":
+                return message.response;
+        }
+    } catch (e) {
+        console.error(e);
     }
 }
 

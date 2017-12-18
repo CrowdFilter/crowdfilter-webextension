@@ -2,16 +2,107 @@
 const stGet = browser.storage.local.get;
 const stSet = browser.storage.local.set;
 
-var client_id;
-var sentDataBuffer = [];
-var lang = browser.i18n.getUILanguage();
+const config = {
+    "filters": {
+        "github": "issues/[0-9]{1,10}\\??",
+        "heise": "/(News-)?Kommentare/.*/(thread|posting)-",
+        "twitter": "/status/[0-9]*(\\?conversation.*)?"
+    },
 
-// Filters are key-value regexp used in the injector
-var filters;
-var classifiers;
+    "classifiers": [
+        {
+            "keyword": {
+                "en": "Harassment",
+                "de": "Belästigung"
+            },
+            "description": {
+                "en": "Content that primarily attacks someone",
+                "de": "Inhalte, die vorrangig jemanden angreifen sollen"
+            },
+            "positive": false
+        },
+
+        {
+            "keyword": {
+                "en": "Trolling",
+                "de": "Trolling"
+            },
+            "description": {
+                "en": "Content intended to provoke extrem reactions",
+                "de": "Inhalte, die extreme Reaktionen hervorrufen sollen"
+            },
+            "positive": false
+        },
+
+        {
+            "keyword": {
+                "en": "Racism",
+                "de": "Rassismus"
+            },
+            "description": {
+                "en": "Bad content that aims at the race, origin or ethnic of the poster",
+                "de": "Beiträge, die sich vorrangig gegen Rasse, Herkunft oder Ethnie richten"
+            },
+            "positive": false
+        },
+
+        {
+            "keyword": {
+                "en": "Fake News",
+                "de": "Fake News"
+            },
+            "description": {
+                "en": "Content that is provable factually false",
+                "de": "Belegbar falsche bzw. unwahre Aussagen"
+            },
+            "positive": false
+        },
+
+        {
+            "keyword": {
+                "en": "Bad contribution",
+                "de": "Schlechter Beitrag"
+            },
+            "description": {
+                "en": "Generally bad contribution, does not add value to the discussion",
+                "de": "Kein sinnvoller Beitrag zur Diskussion"
+            },
+            "positive": false
+        },
+
+        {
+            "keyword": {
+                "en": "Compliment",
+                "de": "Kompliment"
+            },
+            "description": {
+                "en": "This post is a compliment for someone else",
+                "de": "Dieser Beitrag ist ein Kompliment für einen anderen Teilnehmer"
+            },
+            "positive": true
+        },
+
+        {
+            "keyword": {
+                "en": "Good contribution",
+                "de": "Guter Beitrag"
+            },
+            "description": {
+                "en": "Post is a good contribution to the debate",
+                "de": "Inhalt ist guter Beitrag zur Diskussion"
+            },
+            "positive": true
+        }
+    ]
+};
+
+var client_id;
+var lang = browser.i18n.getUILanguage();
+var sentData;
 
 // Set default HTTPS endpoint
 var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
+
 
 /*
  * Fetch client_id from storage, if exists. Else create a new ID and store it.
@@ -20,13 +111,18 @@ var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
 stGet().then((storage) => {
     if (storage.client_id == null) {
         let id = Math.floor(Math.random() * (2**32 - 10**9 + 1)) + 10**9;
-        browser.storage.local.set({ client_id: id });
+        stSet({ client_id: id });
         client_id = id;
     } else {
         client_id = storage.client_id;
     }
-}, error => { console.error(error) });
 
+    if (storage.sentData == null) {
+        stSet({ sentData: [] });
+    } else {
+        sentData = storage.sentData;
+    }
+}, error => { console.error(error) });
 
 /*
  * Listen for changes in the local storage and handle some option changes
@@ -70,6 +166,14 @@ function toggleTor(useTor) {
 }
 
 /*
+ * Append a JSON item to sentData buffer and storage for persistence
+ */
+function appendSentData(item) {
+    sentData.push(item);
+    stSet({ sentData: sentData });
+}
+
+/*
  * Send JSON to collector endpoint
  */
 function sendData(payload) {
@@ -93,34 +197,8 @@ function sendData(payload) {
       // .text returns another promise
       return response.json();
     }).then((json) => {
-      sentDataBuffer.push(json_data);
-    }).catch(error => { console.log(error); });
-}
-
-/*
- * Get config for $endpoint and call $callback with the received JSON
- */
-function fetchConfig() {
-    let req = new Request(collectorHostname + "/config", {
-        method: 'GET',
-        headers: {
-            'Accept': 'application/json'
-        },
-        redirect: 'follow',
-        referrer: 'client'
-    });
-
-    fetch(req).then(function(response) {
-        return response.json();
-    }).then(function(config) {
-        stSet({config: config});
-        filters = config.filters;
-        if (lang == "de") {
-            classifiers = config.classifiers.de;
-        } else {
-            classifiers = config.classifiers.en;
-        }
-    }).catch(error => { console.log(error); });
+        appendSentData(json_data);
+    }).catch(error => { console.error(error); });
 }
 
 /*
@@ -147,8 +225,8 @@ function sendFeedback(comment) {
       // .text returns another promise
       return response.json();
     }).then((json) => {
-      sentDataBuffer.push(json_data);
-    }).catch(error => { console.log(error); });
+        appendSentData(json_data);
+    }).catch(error => { console.error(error); });
 }
 
 /*
@@ -163,8 +241,8 @@ function handleMessage(message, sender, respond) {
         }
 
         // Handle request for latest sent data
-        if (message.msg == "getSentDataBuffer") {
-            respond({ msg: sentDataBuffer });
+        if (message.msg == "getSentData") {
+            respond({ msg: sentData });
         }
     }
 
@@ -172,7 +250,10 @@ function handleMessage(message, sender, respond) {
         if (message.cmd != null) {
             switch (message.cmd) {
                 case "getClassifiers":
-                    respond({ type: "getClassifiers", response: classifiers });
+                    respond({
+                        type: "getClassifiers",
+                        response: config.classifiers
+                    });
                     break;
             }
         }
@@ -202,9 +283,3 @@ function handleActionClick(tab) {
 browser.runtime.onMessage.addListener(handleMessage);
 browser.pageAction.onClicked.addListener(handleActionClick);
 browser.storage.onChanged.addListener(handleStorageChange);
-
-browser.runtime.onStartup.addListener(fetchConfig);
-browser.runtime.onInstalled.addListener(fetchConfig);
-
-// Init timer to regularly fetch the config
-window.setInterval(fetchConfig, 10*60*1000);

@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CrowdFilter",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "__MSG_extensiondescription__",
   "author": "@bitkeks",
   "homepage_url": "https://crowdfilter.bitkeks.eu",
@@ -45,7 +45,7 @@
     {
       "matches": [
         "https://github.com/*/*",
-        "https://www.heise.de/forum/*/News-Kommentare/*",
+        "https://www.heise.de/forum/*",
         "https://twitter.com/*"
       ],
       "js": ["js/cf-injection.js"],

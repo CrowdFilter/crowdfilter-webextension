@@ -30,8 +30,8 @@ function url_catcher(details) {
     // Check each filter
     let url = details.url;
     let regexp;
-    for (const key of Object.keys(filters)) {
-        regexp = new RegExp(filters[key], "i");
+    for (const key of Object.keys(config.filters)) {
+        regexp = new RegExp(config.filters[key], "i");
         if (url.match(regexp) != null) {
             show_page_action();
             inject(key);
