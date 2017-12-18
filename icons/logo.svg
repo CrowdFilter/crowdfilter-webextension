@@ -9,17 +9,17 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="80.041725"
-   height="97.36898"
-   viewBox="0 0 21.177706 25.762209"
+   width="100"
+   height="100"
+   viewBox="0 0 26.458333 26.458333"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="logo.svg"
    style="enable-background:new"
-   inkscape:export-filename="/home/dave/uni/2017ws/beleg/crowdfilter/collector/static/img/logo.png"
-   inkscape:export-xdpi="120.28471"
-   inkscape:export-ydpi="120.28471">
+   inkscape:export-filename="/home/dave/uni/2017ws/beleg/crowdfilter/webextension/icons/logo_16.png"
+   inkscape:export-xdpi="15.36"
+   inkscape:export-ydpi="15.36">
   <defs
      id="defs2" />
   <sodipodi:namedview
@@ -29,17 +29,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="33.536076"
-     inkscape:cy="50.053202"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="33.476174"
+     inkscape:cy="52.374604"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:measure-start="154.553,390.929"
      inkscape:measure-end="0,0"
-     inkscape:window-width="1918"
-     inkscape:window-height="1177"
-     inkscape:window-x="1366"
+     inkscape:window-width="1364"
+     inkscape:window-height="745"
+     inkscape:window-x="0"
      inkscape:window-y="21"
      inkscape:window-maximized="1"
      units="px"
@@ -61,44 +61,44 @@
      id="layer2"
      inkscape:label="swear"
      style="display:inline"
-     transform="translate(-2.6160041,-270.94337)" />
+     transform="translate(-2.6160041,-270.24725)" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-2.6160041,-270.94337)">
+     transform="translate(-2.6160041,-270.24725)">
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.33574796px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ff2a2a;fill-opacity:1;stroke:none;stroke-width:0.0833937px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
-       x="-176.65639"
-       y="224.1989"
+       x="-174.13815"
+       y="225.62312"
        id="text4564"
        transform="rotate(-40.030145)"><tspan
          sodipodi:role="line"
          id="tspan4562"
-         x="-176.65639"
-         y="224.1989"
+         x="-174.13815"
+         y="225.62312"
          style="fill:#ff2a2a;stroke-width:0.0833937px">You &amp;%§$%</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.33574796px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ff2a2a;fill-opacity:1;stroke:none;stroke-width:0.0833937px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
-       x="90.957153"
-       y="261.02573"
+       x="93.483559"
+       y="259.61606"
        id="text4560"
        transform="rotate(18.621282)"><tspan
          sodipodi:role="line"
          id="tspan4558"
-         x="90.957153"
-         y="261.02573"
+         x="93.483559"
+         y="259.61606"
          style="fill:#ff2a2a;stroke-width:0.0833937px">WTF?</tspan></text>
     <path
        style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 3.1805073,278.47823 7.6706357,8.98025 0.09354,8.30206 3.999024,-1.91766 v -5.96345 l 7.296459,-9.26089 z"
+       d="m 6.0247782,277.94906 7.6706358,8.98025 0.09354,8.30206 3.999024,-1.91766 v -5.96345 l 7.296459,-9.26089 z"
        id="path956"
        inkscape:connector-curvature="0" />
     <g
        id="g4548"
-       transform="matrix(0.0833937,0,0,0.0833937,2.6160403,276.87639)"
+       transform="matrix(0.0833937,0,0,0.0833937,5.4603112,276.34722)"
        style="fill:#4d4d4d">
       <path
          id="path4493"
@@ -154,13 +154,13 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.33574796px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:0.0833937px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="8.406743"
-       y="284.78156"
+       x="11.251014"
+       y="284.25238"
        id="text4491"><tspan
          sodipodi:role="line"
          id="tspan4489"
-         x="8.406743"
-         y="284.78156"
+         x="11.251014"
+         y="284.25238"
          style="font-size:7.11626244px;fill:#4d4d4d;stroke-width:0.0833937px">CF</tspan></text>
     <flowRoot
        xml:space="preserve"

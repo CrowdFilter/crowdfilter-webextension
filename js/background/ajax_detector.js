@@ -46,8 +46,8 @@ browser.webRequest.onCompleted.addListener(
     {  // Filter
         urls: [
             "https://github.com/*/*",
-            "https://www.heise.de/forum/*/News-Kommentare/*",
-            "https://twitter.com/*/status/*"
+            "https://www.heise.de/forum/*",
+            "https://twitter.com/*"
         ]
     }
 );
