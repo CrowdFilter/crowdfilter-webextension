@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CrowdFilter",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "__MSG_extensiondescription__",
   "author": "@bitkeks",
   "homepage_url": "https://crowdfilter.bitkeks.eu",
@@ -9,7 +9,7 @@
     "48": "icons/logo.svg"
   },
 
-  "page_action": {
+  "browser_action": {
     "default_title": "CrowdFilter",
     "default_icon": "icons/logo.svg",
     "browser_style": true
@@ -25,34 +25,17 @@
 
   "permissions": [
     "storage",
-    "webRequest",
     "activeTab",
+    "contextMenus",
     "https://crowdfilter.bitkeks.eu/*",
-    "http://5yxnb2zpucxtxbls.onion/*",
-    "https://github.com/*",
-    "https://www.heise.de/forum/*",
-    "https://twitter.com/*"
+    "http://5yxnb2zpucxtxbls.onion/*"
   ],
 
   "background": {
     "scripts": [
-      "js/background/ajax_detector.js",
       "js/background/background.js"
     ]
   },
-
-  "content_scripts": [
-    {
-      "matches": [
-        "https://github.com/*/*",
-        "https://www.heise.de/forum/*",
-        "https://twitter.com/*"
-      ],
-      "js": ["js/cf-injection.js"],
-      "css": ["cf-style.css"],
-      "run_at": "document_end"
-    }
-  ],
 
   "options_ui": {
     "page": "options.html",

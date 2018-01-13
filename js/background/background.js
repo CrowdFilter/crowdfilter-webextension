@@ -1,107 +1,156 @@
 'use strict';
 const stGet = browser.storage.local.get;
 const stSet = browser.storage.local.set;
-
-const config = {
-    "filters": {
-        "github": "issues/[0-9]{1,10}\\??",
-        "heise": "/(News-)?Kommentare/.*/(thread|posting)-",
-        "twitter": "/status/[0-9]*(\\?conversation.*)?"
-    },
-
-    "classifiers": [
-        {
-            "keyword": {
-                "en": "Harassment",
-                "de": "Belästigung"
-            },
-            "description": {
-                "en": "Content that primarily attacks someone",
-                "de": "Inhalte, die vorrangig jemanden angreifen sollen"
-            },
-            "positive": false
-        },
-
-        {
-            "keyword": {
-                "en": "Trolling",
-                "de": "Trolling"
-            },
-            "description": {
-                "en": "Content intended to provoke extrem reactions",
-                "de": "Inhalte, die extreme Reaktionen hervorrufen sollen"
-            },
-            "positive": false
-        },
-
-        {
-            "keyword": {
-                "en": "Racism",
-                "de": "Rassismus"
-            },
-            "description": {
-                "en": "Bad content that aims at race, origin or ethnic of the poster",
-                "de": "Beiträge, die sich vorrangig gegen Rasse, Herkunft oder Ethnie richten"
-            },
-            "positive": false
-        },
-
-        {
-            "keyword": {
-                "en": "Fake News",
-                "de": "Fake News"
-            },
-            "description": {
-                "en": "Content that is provable factually false",
-                "de": "Belegbar falsche bzw. unwahre Aussagen"
-            },
-            "positive": false
-        },
-
-        {
-            "keyword": {
-                "en": "Bad contribution",
-                "de": "Schlechter Beitrag"
-            },
-            "description": {
-                "en": "Generally bad contribution, does not add value to the discussion",
-                "de": "Kein sinnvoller Beitrag zur Diskussion"
-            },
-            "positive": false
-        },
-
-        {
-            "keyword": {
-                "en": "Compliment",
-                "de": "Kompliment"
-            },
-            "description": {
-                "en": "This post is a compliment for someone else",
-                "de": "Dieser Beitrag ist ein Kompliment für einen anderen Teilnehmer"
-            },
-            "positive": true
-        },
-
-        {
-            "keyword": {
-                "en": "Good contribution",
-                "de": "Guter Beitrag"
-            },
-            "description": {
-                "en": "Post is a good contribution to the debate",
-                "de": "Inhalt ist guter Beitrag zur Diskussion"
-            },
-            "positive": true
-        }
-    ]
-};
+const lang = browser.i18n.getUILanguage().startsWith("de") ? "de" : "en";
 
 var client_id;
-var lang = browser.i18n.getUILanguage();
 var sentData;
 
 // Set default HTTPS endpoint
 var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
+
+const classifiers = [
+    {
+        "keyword": {
+            "en": "Harassment",
+            "de": "Belästigung"
+        },
+        "description": {
+            "en": "Content that primarily attacks someone",
+            "de": "Inhalte, die vorrangig jemanden angreifen sollen"
+        },
+        "positive": false
+    },
+
+    {
+        "keyword": {
+            "en": "Trolling",
+            "de": "Trolling"
+        },
+        "description": {
+            "en": "Content intended to provoke extrem reactions",
+            "de": "Inhalte, die extreme Reaktionen hervorrufen sollen"
+        },
+        "positive": false
+    },
+
+    {
+        "keyword": {
+            "en": "Racism",
+            "de": "Rassismus"
+        },
+        "description": {
+            "en": "Bad content that aims at race, origin or ethnic of the poster",
+            "de": "Beiträge, die sich vorrangig gegen Rasse, Herkunft oder Ethnie richten"
+        },
+        "positive": false
+    },
+
+    {
+        "keyword": {
+            "en": "Fake News",
+            "de": "Fake News"
+        },
+        "description": {
+            "en": "Content that is provable factually false",
+            "de": "Belegbar falsche bzw. unwahre Aussagen"
+        },
+        "positive": false
+    },
+
+    {
+        "keyword": {
+            "en": "Bad contribution",
+            "de": "Schlechter Beitrag"
+        },
+        "description": {
+            "en": "Generally bad contribution, does not add value to the discussion",
+            "de": "Kein sinnvoller Beitrag zur Diskussion"
+        },
+        "positive": false
+    },
+
+    {
+        "keyword": {
+            "en": "Compliment",
+            "de": "Kompliment"
+        },
+        "description": {
+            "en": "This post is a compliment for someone else",
+            "de": "Dieser Beitrag ist ein Kompliment für einen anderen Teilnehmer"
+        },
+        "positive": true
+    },
+
+    {
+        "keyword": {
+            "en": "Good contribution",
+            "de": "Guter Beitrag"
+        },
+        "description": {
+            "en": "Post is a good contribution to the debate",
+            "de": "Inhalt ist guter Beitrag zur Diskussion"
+        },
+        "positive": true
+    }
+];
+
+
+// Create an ID to classification mapping to look up the classification
+// after the user clicks on the context menu item. (the info object does
+// not provide the title attribute..)
+var classification_mapping = {};
+for (let classification of classifiers) {
+    let converted_id = classification.keyword[lang].toLowerCase().replace(" ", "_");
+    classification_mapping[converted_id] = classification.keyword[lang];
+}
+
+// Create the context menu top item
+browser.contextMenus.create({
+    id: "cf-top",
+    title: "CrowdFilter",
+    contexts: ["selection"]
+});
+
+// And all children items, the classifications
+for (let kw of classifiers) {
+    browser.contextMenus.create({
+        id: "cf-classification-" + kw.keyword[lang].toLowerCase().replace(" ", "_"),
+        parentId: "cf-top",
+        title: kw.keyword[lang]
+    });
+}
+
+// Event handling of clicking on an item
+browser.contextMenus.onClicked.addListener((info, tab) => {
+    if (!info.menuItemId.startsWith("cf-")) {
+        // Ignore any clicks on other context menu items
+        return;
+    }
+
+    let url = tab.url;
+    let page_title = tab.title;
+
+    let itemId = info.menuItemId;
+    let selection = info.selectionText;
+
+    if (itemId == "cf-top") {
+        return;
+    }
+
+    // Fetch the classifications original title from the mapping
+    let classification = classification_mapping[itemId.substr("cf-classification-".length)];
+
+    let payload = {
+        original_url: url,
+        page_title: page_title,
+        selection: selection,
+        classification: classification
+    };
+
+    console.log(payload);
+});
+
 
 
 /*
@@ -123,7 +172,7 @@ stGet().then((storage) => {
         sentData = storage.sentData;
     }
 
-    stSet({ classifiers: config.classifiers });
+    stSet({ classifiers: classifiers });
 }, error => { console.error(error) });
 
 /*
@@ -283,5 +332,6 @@ function handleActionClick(tab) {
  * Add listeners for events.
  */
 browser.runtime.onMessage.addListener(handleMessage);
-browser.pageAction.onClicked.addListener(handleActionClick);
+//~ browser.pageAction.onClicked.addListener(handleActionClick);
 browser.storage.onChanged.addListener(handleStorageChange);
+browser.browserAction.onClicked.addListener(handleActionClick);

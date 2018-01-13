@@ -15,5 +15,10 @@
   "useTorLabel": {
     "message": "Use TOR hidden service",
     "description": ""
+  },
+
+  "testMessage": {
+    "message": "Testmessage for context menu",
+    "description": ""
   }
 }

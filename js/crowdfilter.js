@@ -1,6 +1,15 @@
 const icon_url = browser.extension.getURL("icons/logo_16.png");
 const d = document;
 const lang = browser.i18n.getUILanguage().startsWith("de") ? "de" : "en";
+const getSel = window.getSelection;
+
+
+
+
+
+// v2: window.getSelection()
+
+
 
 /*
  * Handler for click event on cf-dontlike button
