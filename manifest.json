@@ -1,18 +1,12 @@
 {
   "manifest_version": 2,
   "name": "CrowdFilter",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "__MSG_extensiondescription__",
   "author": "@bitkeks",
   "homepage_url": "https://crowdfilter.bitkeks.eu",
   "icons": {
     "48": "icons/logo.svg"
-  },
-
-  "browser_action": {
-    "default_title": "CrowdFilter",
-    "default_icon": "icons/logo.svg",
-    "browser_style": true
   },
 
   "applications": {
@@ -37,14 +31,17 @@
     ]
   },
 
-  "options_ui": {
-    "page": "options.html",
+  "browser_action": {
+    "default_title": "CrowdFilter",
+    "default_icon": "icons/logo.svg",
     "browser_style": true
   },
 
-  "web_accessible_resources": [
-      "icons/logo_16.png"
-  ],
+  "options_ui": {
+    "page":"infopage/index.html",
+    "open_in_tab": true,
+    "browser_style": true
+  },
 
   "default_locale": "en"
 }

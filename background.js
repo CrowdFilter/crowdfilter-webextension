@@ -17,7 +17,7 @@ const classifiers = [
         },
         "description": {
             "en": "Content that primarily attacks someone",
-            "de": "Inhalte, die vorrangig jemanden angreifen sollen"
+            "de": "Inhalte, die vorrangig jemanden belästigen sollen"
         }
     },
 
@@ -186,19 +186,6 @@ function handleStorageChange(changes, areaName) {
         }
         toggleTor(false);
     }
-
-    // Hack to buffer feedback comments.
-    // Does not work with sendMessage in options page, so options page sets
-    // a new value for the "setting", which triggers this function.
-    // Second condition: handle ONLY new feedbacks, not removal.
-    // storage.remove produces an object with no newValue.
-    if (changes.feedback != null && changes.feedback.newValue != null) {
-        let comment = changes.feedback.newValue;
-        if (comment == "") return;
-        sendFeedback(comment);
-        browser.storage.local.remove("feedback")
-            .then(null, error => { console.error(error); });
-    }
 }
 
 /*
@@ -293,11 +280,9 @@ function handleActionClick(tab) {
  */
 function handleMessage(message, sender, respond) {
     // Handle request for client ID to display in popup
-    if (message.payload == "setup") {
-        respond({
-            client_id: client_id,
-            sentData: sentData
-        });
+    if (message.subject == "feedback") {
+        if (message.content.length < 1) return;
+        sendFeedback(message.content);
     }
 }
 

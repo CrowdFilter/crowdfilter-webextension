@@ -3,17 +3,40 @@
     <head>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="style.css" />
-        <script src="infopage.js"></script>
     </head>
     <body>
         <div>
             <h1><img class="logo" src="logo.png"> CrowdFilter</h1>
             <p>
-                Dies ist ein Projekt der TU Dresden, Fakultät Informatik, Lehrstuhl für Datenschutz und Datensicherheit.<br>
-                Mehr Informationen auf <a href="https://crowdfilter.bitkeks.eu">der Projektseite</a>.<br>
+                Dies ist ein Projekt der TU Dresden, Fakultät Informatik, Lehrstuhl für Datenschutz und Datensicherheit. Mehr Informationen auf <a href="https://crowdfilter.bitkeks.eu">der Projektseite</a>.<br>
                 Lokale Client-ID: <span id="client-id"></span><br>
             </p>
-            <p>In der folgenden Tabelle werden die Daten dargestellt, die die Extension in dieser Sitzung an unseren Server gesendet hat. Zur besseren Übersichtlichkeit ist der Inhalt von "html" entfernt, es handelt sich hierbei um den HTML-Quellcode des entsprechend markierten Kommentars.</p>
+
+            <h2>Einstellungen</h2>
+            <p><b id="use-tor">no value found</b></p>
+            <form id="settings">
+                <input type="checkbox" id="useTor" name="useTor">
+                <label id="useTor-label" for="useTor"></label><br>
+                <button class="browser-style" type="submit">Einstellungen speichern</button>
+            </form>
+
+            <h2>Feedback</h2>
+            <p>Hast du Feedback zum Projekt oder möchtest Kontakt aufnehmen? Im folgenden Textfeld kannst du uns eine Nachricht senden.</p>
+            <form class="browser-style" id="feedback">
+                <textarea id="comment" name="comment" rows="6" cols="80" placeholder="Nachricht eingeben.."></textarea><br>
+                <button class="browser-style" type="submit">Submit</button><span class="thanks">Feedback gesendet, danke!</span>
+            </form>
+
+            <h2>Klassifizierungen</h2>
+            <table id="classifiers">
+                <tr>
+                    <th>Klassifizierung</th>
+                    <th>Beschreibung</th>
+                </tr>
+            </table>
+
+            <h2>Gesendete Daten</h2>
+            <p>In der folgenden Tabelle werden die Daten dargestellt, die die Extension an unseren Server gesendet hat. Zur besseren Übersichtlichkeit ist der Inhalt von "selection" gekürzt.</p>
 
             <div class="table">
                 <table id="sentDataBuffer">
@@ -24,5 +47,6 @@
                 </table>
             </div>
         </div>
+        <script src="infopage.js"></script>
     </body>
 </html>

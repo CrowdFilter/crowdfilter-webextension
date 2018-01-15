@@ -1,7 +1,10 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 12pt;
-    margin: 0 14px;
+    font-size: 11pt;
+    margin: 3em;
+}
+h2 {
+    margin-top: 3em;
 }
 img.logo {
     max-width: 40px;
@@ -11,17 +14,29 @@ div.table {
 }
 table {
     border-collapse: collapse;
+    padding: 0;
+    max-width: 70%;
 }
 table, tr, td, th {
-    border: 1px solid grey;
+    padding: 4px 10px 4px 0 !important;
+    line-break: none;
 }
 td, th {
     padding: 6px;
 }
 th {
-    background-color: #ddd;
+    text-align: left;
 }
 td.monospace {
     font-family: monospace;
-    font-size: 10pt;
+    font-size: 9pt;
+}
+
+
+.pos { color:green; }
+.neg { color:darkred; }
+form > * { margin: 6px; }
+.thanks { color: green; display: none; }
+table#classifiers td {
+    padding: 3px 3em 3px 0;
 }
