@@ -18,8 +18,7 @@ const classifiers = [
         "description": {
             "en": "Content that primarily attacks someone",
             "de": "Inhalte, die vorrangig jemanden angreifen sollen"
-        },
-        "positive": false
+        }
     },
 
     {
@@ -30,8 +29,7 @@ const classifiers = [
         "description": {
             "en": "Content intended to provoke extrem reactions",
             "de": "Inhalte, die extreme Reaktionen hervorrufen sollen"
-        },
-        "positive": false
+        }
     },
 
     {
@@ -42,8 +40,7 @@ const classifiers = [
         "description": {
             "en": "Bad content that aims at race, origin or ethnic of the poster",
             "de": "Beiträge, die sich vorrangig gegen Rasse, Herkunft oder Ethnie richten"
-        },
-        "positive": false
+        }
     },
 
     {
@@ -54,8 +51,7 @@ const classifiers = [
         "description": {
             "en": "Content that is provable factually false",
             "de": "Belegbar falsche bzw. unwahre Aussagen"
-        },
-        "positive": false
+        }
     },
 
     {
@@ -66,44 +62,40 @@ const classifiers = [
         "description": {
             "en": "Generally bad contribution, does not add value to the discussion",
             "de": "Kein sinnvoller Beitrag zur Diskussion"
-        },
-        "positive": false
+        }
     },
 
     {
         "keyword": {
-            "en": "Compliment",
-            "de": "Kompliment"
+            "en": "Sexism",
+            "de": "Sexismus"
         },
         "description": {
-            "en": "This post is a compliment for someone else",
-            "de": "Dieser Beitrag ist ein Kompliment für einen anderen Teilnehmer"
-        },
-        "positive": true
+            "en": "Targeting the sex of the attacked person",
+            "de": "Angriff, der sich vorwiegend auf das Geschlecht der anderen Person bezieht"
+        }
     },
 
     {
         "keyword": {
-            "en": "Good contribution",
-            "de": "Guter Beitrag"
+            "en": "Xenophobia",
+            "de": "Fremdenfeindlichkeit"
         },
         "description": {
-            "en": "Post is a good contribution to the debate",
-            "de": "Inhalt ist guter Beitrag zur Diskussion"
-        },
-        "positive": true
+            "en": "Attacking a person because of their geographical origin",
+            "de": "Verurteilung einer Person basierend auf deren geographischer Herkunft"
+        }
     }
 ];
 
+/*
+ * Setup and handling of the context menu items which are used in this addon
+ */
 
 // Create an ID to classification mapping to look up the classification
 // after the user clicks on the context menu item. (the info object does
 // not provide the title attribute..)
 var classification_mapping = {};
-for (let classification of classifiers) {
-    let converted_id = classification.keyword[lang].toLowerCase().replace(" ", "_");
-    classification_mapping[converted_id] = classification.keyword[lang];
-}
 
 // Create the context menu top item
 browser.contextMenus.create({
@@ -113,11 +105,19 @@ browser.contextMenus.create({
 });
 
 // And all children items, the classifications
-for (let kw of classifiers) {
+var sort_function = function(a, b) { return a.keyword[lang] < b.keyword[lang] ? -1 : 1 };
+for (let classification of classifiers.sort(sort_function)) {
+    let classification_title = classification.keyword[lang];
+    let converted_title = classification.keyword[lang].toLowerCase().replace(" ", "_");
+
+    // Add both strings to mapping
+    classification_mapping[converted_title] = classification_title;
+
+    // Create the context menu child item
     browser.contextMenus.create({
-        id: "cf-classification-" + kw.keyword[lang].toLowerCase().replace(" ", "_"),
+        id: "cf-classification-" + converted_title,
         parentId: "cf-top",
-        title: kw.keyword[lang]
+        title: classification_title
     });
 }
 
@@ -148,9 +148,8 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
         classification: classification
     };
 
-    console.log(payload);
+    sendData(payload);
 });
-
 
 
 /*
@@ -234,26 +233,27 @@ function sendData(payload) {
         payload: payload
     };
 
-    var req = new Request(collectorHostname + "/collect/sendto", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(json_data),
-        redirect: 'follow',
-        referrer: 'client'
-    });
+    console.log(json_data);
+    //~ var req = new Request(collectorHostname + "/collect/sendto/v2", {
+        //~ method: 'POST',
+        //~ headers: {
+            //~ 'Content-Type': 'application/json'
+        //~ },
+        //~ body: JSON.stringify(json_data),
+        //~ redirect: 'follow',
+        //~ referrer: 'client'
+    //~ });
 
-    fetch(req).then(function(response) {
-      // .text returns another promise
-      return response.json();
-    }).then((json) => {
-        appendSentData(json_data);
-    }).catch(error => { console.error(error); });
+    //~ fetch(req).then(function(response) {
+      //~ // .json returns another promise
+      //~ return response.json();
+    //~ }).then((json) => {
+        //~ appendSentData(json_data);
+    //~ }).catch(error => { console.error(error); });
 }
 
 /*
- *
+ * Send feedback from options form to endpoint
  */
 function sendFeedback(comment) {
     let json_data = {
@@ -281,46 +281,10 @@ function sendFeedback(comment) {
 }
 
 /*
- * Handle messages from content scripts (injectors)
- */
-function handleMessage(message, sender, respond) {
-    // Filter messages from popup
-    if (message.src == "popup") {
-        // Handle request for client ID to display in popup
-        if (message.msg == "getClientId") {
-            respond({ msg: client_id });
-        }
-
-        // Handle request for latest sent data
-        if (message.msg == "getSentData") {
-            respond({ msg: sentData });
-        }
-    }
-
-    if (message.src == "injector") {
-        if (message.cmd != null) {
-            switch (message.cmd) {
-                case "getClassifiers":
-                    respond({
-                        type: "getClassifiers",
-                        response: config.classifiers
-                    });
-                    break;
-            }
-        }
-
-        if (message.payload != null) {
-            // Injector content script send a payload to be saved in database
-            sendData(message.payload);
-        }
-    }
-}
-
-/*
- * Handle clicks on the address bar button.
+ * Handle clicks on the toolbar button.
  */
 function handleActionClick(tab) {
-    let url = browser.i18n.getUILanguage() == "de"? "/infopage/index-de.html":"/infopage/index.html";
+    let url = lang == "de"? "/infopage/index-de.html":"/infopage/index.html";
     let new_tab = browser.tabs.create({
         active: true,
         index: tab.index + 1,
@@ -329,9 +293,21 @@ function handleActionClick(tab) {
 }
 
 /*
+ * Handle messages from infopage
+ */
+function handleMessage(message, sender, respond) {
+    // Handle request for client ID to display in popup
+    if (message.payload == "setup") {
+        respond({
+            client_id: client_id,
+            sentData: sentData
+        });
+    }
+}
+
+/*
  * Add listeners for events.
  */
 browser.runtime.onMessage.addListener(handleMessage);
-//~ browser.pageAction.onClicked.addListener(handleActionClick);
 browser.storage.onChanged.addListener(handleStorageChange);
 browser.browserAction.onClicked.addListener(handleActionClick);
