@@ -33,9 +33,14 @@ sendMessage("setup", function(response) {
         cell = row.insertCell();
         let data = response.sentData[item];
         if (data.comment != null) {
+            // Feedback sent
             cell.innerText = "Feedback: " + data.comment;
         } else if (data.payload != null) {
-            data.payload.html = [];
+            // Classification sent. Short the selection text
+
+            if (data.payload.selection.length > 100) {
+                data.payload.selection = data.payload.selection.substr(0, 100).trim() + "..";
+            }
             cell.innerText = JSON.stringify(data);
             cell.classList.add('monospace');
         }

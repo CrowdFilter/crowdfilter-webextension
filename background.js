@@ -3,8 +3,8 @@ const stGet = browser.storage.local.get;
 const stSet = browser.storage.local.set;
 const lang = browser.i18n.getUILanguage().startsWith("de") ? "de" : "en";
 
-var client_id;
-var sentData;
+var client_id = Math.floor(Math.random() * (2**32 - 10**9 + 1)) + 10**9;
+var sentData = [];
 
 // Set default HTTPS endpoint
 var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
@@ -56,12 +56,12 @@ const classifiers = [
 
     {
         "keyword": {
-            "en": "Bad contribution",
-            "de": "Schlechter Beitrag"
+            "en": "Useless contribution",
+            "de": "Unbrauchbarer Beitrag"
         },
         "description": {
-            "en": "Generally bad contribution, does not add value to the discussion",
-            "de": "Kein sinnvoller Beitrag zur Diskussion"
+            "en": "Contribution does not add value to the discussion",
+            "de": "Inhalt leistet keinen sinnvollen Beitrag zur Diskussion"
         }
     },
 
@@ -158,9 +158,7 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
  */
 stGet().then((storage) => {
     if (storage.client_id == null) {
-        let id = Math.floor(Math.random() * (2**32 - 10**9 + 1)) + 10**9;
-        stSet({ client_id: id });
-        client_id = id;
+        stSet({ client_id: client_id });
     } else {
         client_id = storage.client_id;
     }
@@ -233,23 +231,22 @@ function sendData(payload) {
         payload: payload
     };
 
-    console.log(json_data);
-    //~ var req = new Request(collectorHostname + "/collect/sendto/v2", {
-        //~ method: 'POST',
-        //~ headers: {
-            //~ 'Content-Type': 'application/json'
-        //~ },
-        //~ body: JSON.stringify(json_data),
-        //~ redirect: 'follow',
-        //~ referrer: 'client'
-    //~ });
+    var req = new Request(collectorHostname + "/collect/sendto/v2", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(json_data),
+        redirect: 'follow',
+        referrer: 'client'
+    });
 
-    //~ fetch(req).then(function(response) {
-      //~ // .json returns another promise
-      //~ return response.json();
-    //~ }).then((json) => {
-        //~ appendSentData(json_data);
-    //~ }).catch(error => { console.error(error); });
+    fetch(req).then(function(response) {
+        appendSentData(json_data);
+        // .json returns another promise
+        return response.json();
+    }).then((json) => {
+    }).catch(error => { console.error(error); });
 }
 
 /*
@@ -273,10 +270,9 @@ function sendFeedback(comment) {
     });
 
     fetch(req).then(function(response) {
-      // .text returns another promise
-      return response.json();
-    }).then((json) => {
         appendSentData(json_data);
+        return response.json();
+    }).then((json) => {
     }).catch(error => { console.error(error); });
 }
 
