@@ -15,5 +15,9 @@
   "useTorLabel": {
     "message": "TOR Hidden Service verwenden",
     "description": ""
+  },
+  "contextNotActive": {
+    "message": "CrowdFilter [nicht aktiv]",
+    "description": ""
   }
 }

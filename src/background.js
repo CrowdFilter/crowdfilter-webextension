@@ -5,6 +5,7 @@ const lang = browser.i18n.getUILanguage().startsWith("de") ? "de" : "en";
 
 var client_id = Math.floor(Math.random() * (2**32 - 10**9 + 1)) + 10**9;
 var sentData = [];
+var user_confirmed = false;
 
 // Set default HTTPS endpoint
 var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
@@ -100,7 +101,7 @@ var classification_mapping = {};
 // Create the context menu top item
 browser.contextMenus.create({
     id: "cf-top",
-    title: "CrowdFilter",
+    title: browser.i18n.getMessage("contextNotActive"),
     contexts: ["selection"]
 });
 
@@ -174,6 +175,12 @@ stGet().then((storage) => {
         sentData = storage.sentData;
     }
 
+    if (storage.user_confirmed == null) {
+        stSet({ user_confirmed: user_confirmed });
+    } else {
+        user_confirmed = storage.user_confirmed;
+    }
+
     stSet({ classifiers: classifiers });
 }, error => { console.error(error) });
 
@@ -190,6 +197,16 @@ function handleStorageChange(changes, areaName) {
             return;
         }
         toggleTor(false);
+    }
+
+    if (changes["user_confirmed"] != undefined) {
+        if (changes["user_confirmed"].newValue == true) {
+            user_confirmed = true;
+            browser.contextMenus.update(
+                "cf-top",
+                { title: "CrowdFilter" }
+            );
+        }
     }
 }
 
@@ -217,6 +234,11 @@ function appendSentData(item) {
  * Send JSON to collector endpoint
  */
 function sendData(payload) {
+    if (!user_confirmed) {
+        // User did not yet activate the addon, so we don't send anything.
+        return;
+    }
+
     let json_data = {
         client_id: client_id,
         timestamp: Date.now(),
@@ -298,7 +320,7 @@ function handleInstallation(details) {
             active: true,
             url: url
         });
-        tab.then(tab =>  { console.log(tab); }, error => { console.error(error); });
+        tab.then(tab => {}, error => { console.error(error); });
     }
 }
 
