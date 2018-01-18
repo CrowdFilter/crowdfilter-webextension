@@ -225,14 +225,12 @@ function sendData(payload) {
         },
         body: JSON.stringify(json_data),
         redirect: 'follow',
-        referrer: 'client'
+        referrer: 'client',
+        mode: 'cors'
     });
 
     fetch(req).then(function(response) {
         appendSentData(json_data);
-        // .json returns another promise
-        return response.json();
-    }).then((json) => {
     }).catch(error => { console.error(error); });
 }
 
@@ -253,13 +251,12 @@ function sendFeedback(comment) {
         },
         body: JSON.stringify(json_data),
         redirect: 'follow',
-        referrer: 'client'
+        referrer: 'client',
+        mode: 'cors'
     });
 
     fetch(req).then(function(response) {
         appendSentData(json_data);
-        return response.json();
-    }).then((json) => {
     }).catch(error => { console.error(error); });
 }
 
