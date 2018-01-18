@@ -1,6 +1,6 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 11pt;
+    font-size: 14pt;
     margin: 3em;
 }
 h2 {
@@ -30,6 +30,22 @@ th {
 td.monospace {
     font-family: monospace;
     font-size: 9pt;
+}
+
+.screens {
+    border: 1px solid #eee;
+    box-shadow: 5px 5px #ccc;
+    border-radius: 8px;
+    float: right;
+    margin: 0 2em;
+}
+
+.wrapper {
+    max-width: 150ch;
+}
+.quote {
+    background-color: #f5f5f5;
+    padding: 3px 10px;
 }
 
 

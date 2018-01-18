@@ -131,6 +131,11 @@ browser.contextMenus.onClicked.addListener((info, tab) => {
     let url = tab.url;
     let page_title = tab.title;
 
+    if (url.startsWith("moz-extension://")) {
+        // Skip introduction postings ;)
+        return;
+    }
+
     let itemId = info.menuItemId;
     let selection = info.selectionText;
 
@@ -264,7 +269,7 @@ function sendFeedback(comment) {
  * Handle clicks on the toolbar button.
  */
 function handleActionClick(tab) {
-    let url = lang == "de"? "/infopage/index-de.html":"/infopage/index.html";
+    let url = lang == "de" ? "/infopage/index-de.html" : "/infopage/index.html";
     let new_tab = browser.tabs.create({
         active: true,
         index: tab.index + 1,
@@ -284,8 +289,23 @@ function handleMessage(message, sender, respond) {
 }
 
 /*
+ * Create a popup after installation
+ */
+function handleInstallation(details) {
+    if (details.reason == "install" || details.reason == "update") {
+        let url = lang == "de" ? "/introduction/de.html" : "/introduction/en.html";
+        let tab = browser.tabs.create({
+            active: true,
+            url: url
+        });
+        tab.then(tab =>  { console.log(tab); }, error => { console.error(error); });
+    }
+}
+
+/*
  * Add listeners for events.
  */
+browser.runtime.onInstalled.addListener(handleInstallation);
 browser.runtime.onMessage.addListener(handleMessage);
 browser.storage.onChanged.addListener(handleStorageChange);
 browser.browserAction.onClicked.addListener(handleActionClick);
