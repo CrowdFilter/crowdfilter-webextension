@@ -8,7 +8,11 @@ var sentData = [];
 var user_confirmed = false;
 
 // Set default HTTPS endpoint
-var collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
+var endpoints = {
+    https: "https://crowdfilter.inf.tu-dresden.de/collector",
+    tor: "http://5yxnb2zpucxtxbls.onion/collector"
+};
+var collectorHostname = endpoints.https;
 
 const classifiers = [
     {
@@ -216,10 +220,10 @@ function handleStorageChange(changes, areaName) {
  */
 function toggleTor(useTor) {
     if (useTor) {
-        collectorHostname = "http://5yxnb2zpucxtxbls.onion/collector";
+        collectorHostname = endpoints.tor;
         return;
     }
-    collectorHostname = "https://crowdfilter.bitkeks.eu/collector";
+    collectorHostname = endpoints.https;
 }
 
 /*

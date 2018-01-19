@@ -4,7 +4,7 @@
   "version": "2.2.0",
   "description": "__MSG_extensiondescription__",
   "author": "@bitkeks",
-  "homepage_url": "https://crowdfilter.bitkeks.eu",
+  "homepage_url": "https://crowdfilter.inf.tu-dresden.de",
   "icons": {
     "48": "icons/logo.svg"
   },
@@ -13,7 +13,7 @@
     "gecko": {
       "id": "webextension@crowdfilter.bitkeks.eu",
       "strict_min_version": "57.0",
-      "update_url": "https://crowdfilter.bitkeks.eu/addon/updates.json"
+      "update_url": "https://crowdfilter.inf.tu-dresden.de/addon/updates.json"
     }
   },
 

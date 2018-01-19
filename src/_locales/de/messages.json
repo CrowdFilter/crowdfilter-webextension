@@ -5,19 +5,23 @@
   },
 
   "useTorNeg": {
-    "message": "Gesammelte Daten werden normal über HTTPS übermittelt",
+    "message": "Daten werden verschlüsselt an crowdfilter.inf.tu-dresden.de übermittelt",
     "description": ""
   },
   "useTorPos": {
-    "message": "Gesammelte Daten werden an den TOR Hidden Service übermittelt",
+    "message": "Daten werden verschlüsselt an den Tor Hidden Service übermittelt",
     "description": ""
   },
   "useTorLabel": {
-    "message": "TOR Hidden Service verwenden",
+    "message": "Tor Hidden Service verwenden",
     "description": ""
   },
   "contextNotActive": {
     "message": "CrowdFilter [nicht aktiv]",
+    "description": ""
+  },
+  "confirmationAlreadyGiven": {
+    "message": "Das Addon ist aktiviert!",
     "description": ""
   }
 }

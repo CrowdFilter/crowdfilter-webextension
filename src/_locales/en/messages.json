@@ -5,19 +5,23 @@
   },
 
   "useTorNeg": {
-    "message": "Data will NOT be sent to the TOR hidden service",
+    "message": "Data will be sent to crowdfilter.inf.tu-dresden.de",
     "description": ""
   },
   "useTorPos": {
-    "message": "Data will be sent to the TOR hidden service",
+    "message": "Data will be sent to the Tor hidden service",
     "description": ""
   },
   "useTorLabel": {
-    "message": "Use TOR hidden service",
+    "message": "Use Tor hidden service",
     "description": ""
   },
   "contextNotActive": {
     "message": "CrowdFilter [not active]",
+    "description": ""
+  },
+  "confirmationAlreadyGiven": {
+    "message": "The addon is activated!",
     "description": ""
   }
 }
