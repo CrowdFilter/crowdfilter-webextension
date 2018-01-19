@@ -183,6 +183,9 @@ stGet().then((storage) => {
         stSet({ user_confirmed: user_confirmed });
     } else {
         user_confirmed = storage.user_confirmed;
+        if (user_confirmed == true) {
+            userConfirmedAddon();
+        }
     }
 
     stSet({ classifiers: classifiers });
@@ -206,12 +209,19 @@ function handleStorageChange(changes, areaName) {
     if (changes["user_confirmed"] != undefined) {
         if (changes["user_confirmed"].newValue == true) {
             user_confirmed = true;
-            browser.contextMenus.update(
-                "cf-top",
-                { title: "CrowdFilter" }
-            );
+            userConfirmedAddon();
         }
     }
+}
+
+/*
+ * The user activated the addon, user_confirmed is true
+ */
+function userConfirmedAddon() {
+    browser.contextMenus.update(
+        "cf-top",
+        { title: "CrowdFilter" }
+    );
 }
 
 /*
