@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "CrowdFilter",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "__MSG_extensiondescription__",
   "author": "@bitkeks",
   "homepage_url": "https://crowdfilter.inf.tu-dresden.de",
